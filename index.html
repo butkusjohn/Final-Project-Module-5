@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simplified Movies API ref</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav>
+      <div class="logo">
+        <img
+          src="./assets/fes-logo.png"
+          alt=""
+          class="logo__img"
+          width="50px"
+        />
+        <div class="logo__title"><span>Simplified</span> Flix</div>
+      </div>
+      <form class="search-form" id="searchForm">
+        <div class="search-form__group">
+          <input
+            class="search-form__input"
+            type="text"
+            id="searchInput"
+            placeholder="Search movies..."
+            required
+          />
+          <!-- no need for button with an onClick because it's part of a form with a type="submit" below  -->
+          <button class="search-form__button" type="submit" aria-label="Search">
+            <svg
+              class="search-form__icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="7"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </nav>
+
+    <main>
+      <div class="controls">
+        <p id="resultsInfo" class="resultsInfo" aria-live="polite"><span>Showing: </span>Avengers</p>
+        <div>
+          <label for="sortSelect">Sort:</label>
+          <select id="sortSelect">
+            <option value="default">Default</option>
+            <option value="a-z">A - Z</option>
+            <option value="z-a">Z - A</option>
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="movies-grid" id="moviesGrid">
+        <!-- this is where the search results are displayed -->
+        <!-- replace the hardcoded values below with dynamic data from your API.  Hint: use .map inside your javascript file (i.e. script.js)-->
+        <div class="movie-card">
+          <img
+            class="movie-card__img"
+            src="https://m.media-amazon.com/images/M/MV5BNGE0YTVjNzUtNzJjOS00NGNlLTgxMzctZTY4YTE1Y2Y1ZTU4XkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg"
+            alt="The Avengers poster"
+          />
+          <h2 class="movie-card__title">The Avengers</h2>
+          <p class="movie-card__year">2012</p>
+        </div>
+        <div class="movie-card">
+          <img
+            class="movie-card__img"
+            src="https://m.media-amazon.com/images/M/MV5BMWEyNDM2ZmQtMmFkNi00MTQ1LTk1MjItMzdlZGJlYmIyYzZlXkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg"
+            alt=""
+          />
+          <h2 class="movie-card__title">Avengers: Endgame</h2>
+          <p class="movie-card__year">2019</p>
+        </div>
+        <div class="movie-card">
+          <img
+            class="movie-card__img"
+            src="https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_QL75_UX380_CR0,0,380,562_.jpg"
+            alt=""
+          />
+          <h2 class="movie-card__title">Avengers: Infinity War</h2>
+          <p class="movie-card__year">2018</p>
+        </div>
+        <div class="movie-card">
+          <img
+            class="movie-card__img"
+            src="https://m.media-amazon.com/images/M/MV5BODBhYTg1NGQtNGVmNS00ZTdiLThjYTYtZDFkNzRiNTZmNDZjXkEyXkFqcGc@._V1_QL75_UX380_CR0,0,380,562_.jpg"
+            alt=""
+          />
+          <h2 class="movie-card__title">Avengers: Age of Ultron</h2>
+          <p class="movie-card__year">2015</p>
+        </div>
+        <div class="movie-card">
+          <img
+            class="movie-card__img"
+            src="https://m.media-amazon.com/images/M/MV5BZTA4ZmZlZWQtZDRlYS00ZWZhLTk0MzEtYjExMGIzMTBlZDNlXkEyXkFqcGc@._V1_SX300.jpg"
+            alt=""
+          />
+          <h2 class="movie-card__title">The Avengers</h2>
+          <p class="movie-card__year">1998</p>
+        </div>
+        <div class="movie-card">
+          <img
+            class="movie-card__img"
+            src="https://image.tmdb.org/t/p/w500/r1JDhMrqCOZKh7lc0vQlRYQ46cE.jpg"
+            alt="The Avengers: Earth's Mightiest Heroes poster"
+          />
+          <h2 class="movie-card__title">The Avengers: Earth's Mightiest Heroes</h2>
+          <p class="movie-card__year">2010</p>
+        </div>
+        <div class="movie-card">
+          <img
+            class="movie-card__img"
+            src="https://image.tmdb.org/t/p/w500/iMCkGHVrYRdqKROPRPmVaJVSlg3.jpg"
+            alt="Ultimate Avengers: The Movie poster"
+          />
+          <h2 class="movie-card__title">Ultimate Avengers: The Movie</h2>
+          <p class="movie-card__year">2006</p>
+        </div>
+        <div class="movie-card">
+          <img
+            class="movie-card__img"
+            src="https://image.tmdb.org/t/p/w500/7D2DosFWqmNc0vfZJPqwY5uIvsR.jpg"
+            alt="The Avengers 1961 television series poster"
+          />
+          <h2 class="movie-card__title">The Avengers (TV Series)</h2>
+          <p class="movie-card__year">1961–1969</p>
+        </div>
+        <div class="movie-card">
+          <img
+            class="movie-card__img"
+            src="https://image.tmdb.org/t/p/w500/aVYPq7FSvsdNQOXVIFnndXJPCXn.jpg"
+            alt="Avengers Assemble television series poster"
+          />
+          <h2 class="movie-card__title">Avengers Assemble</h2>
+          <p class="movie-card__year">2013–2019</p>
+        </div>
+        <div class="movie-card">
+          <img
+            class="movie-card__img"
+            src="https://image.tmdb.org/t/p/w500/sMFyYZR9krqcQC99G6jnb10Zv4P.jpg"
+            alt="Ultimate Avengers II: Rise of the Panther poster"
+          />
+          <h2 class="movie-card__title">Ultimate Avengers II: Rise of the Panther</h2>
+          <p class="movie-card__year">2006</p>
+        </div>
+        <!-- replace the hardcoded values above with dynamic data from your API.  Hint: use .map -->
+      </div>
+    </main>
+
+    <footer>
+      <p>Created by Simplified.org. Powered by OMDBapi.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
