@@ -6,7 +6,11 @@ const moviesGrid = document.querySelector("#moviesGrid");
 const resultsInfo = document.querySelector("#resultsInfo");
 const sortSelect = document.querySelector("#sortSelect");
 
-let movies = [];
+let movies = Array.from(moviesGrid.querySelectorAll(".movie-card"), (card) => ({
+  Title: card.querySelector(".movie-card__title").textContent,
+  Year: card.querySelector(".movie-card__year").textContent,
+  Poster: card.querySelector(".movie-card__img")?.getAttribute("src"),
+}));
 let searchController;
 
 function waitForMinimumSpinnerTime(startTime) {
@@ -42,7 +46,16 @@ function showLoadingSpinner() {
 
 function getYear(movie) {
   const year = Number.parseInt(movie.Year, 10);
-  return Number.isNaN(year) ? 0 : year;
+  return Number.isNaN(year) ? null : year;
+}
+
+function compareYears(a, b, newestFirst) {
+  const firstYear = getYear(a);
+  const secondYear = getYear(b);
+
+  if (firstYear === null) return secondYear === null ? 0 : 1;
+  if (secondYear === null) return -1;
+  return newestFirst ? secondYear - firstYear : firstYear - secondYear;
 }
 
 function getSortedMovies() {
@@ -56,10 +69,10 @@ function getSortedMovies() {
       sortedMovies.sort((a, b) => b.Title.localeCompare(a.Title));
       break;
     case "newest":
-      sortedMovies.sort((a, b) => getYear(b) - getYear(a));
+      sortedMovies.sort((a, b) => compareYears(a, b, true));
       break;
     case "oldest":
-      sortedMovies.sort((a, b) => getYear(a) - getYear(b));
+      sortedMovies.sort((a, b) => compareYears(a, b, false));
       break;
   }
 
@@ -156,6 +169,7 @@ searchForm.addEventListener("submit", async (event) => {
     await waitForMinimumSpinnerTime(spinnerStartedAt);
 
     if (!controller.signal.aborted && error.name !== "AbortError") {
+      movies = [];
       moviesGrid.replaceChildren();
       showMessage(`Search failed: ${error.message}`);
     }
@@ -167,7 +181,7 @@ searchForm.addEventListener("submit", async (event) => {
 });
 
 sortSelect.addEventListener("change", () => {
-  if (movies.length > 0) {
+  if (!searchController && movies.length > 0) {
     renderMovies();
   }
 });
