@@ -1,4 +1,4 @@
-const OMDB_API_KEY = "YOUR_OMDB_API_KEY";
+const OMDB_API_KEY = window.OMDB_API_KEY;
 
 const searchForm = document.querySelector("#searchForm");
 const searchInput = document.querySelector("#searchInput");
@@ -108,8 +108,8 @@ searchForm.addEventListener("submit", async (event) => {
     return;
   }
 
-  if (OMDB_API_KEY === "YOUR_OMDB_API_KEY") {
-    showMessage("Add your OMDb API key in script.js to enable search.");
+  if (!OMDB_API_KEY || OMDB_API_KEY === "YOUR_OMDB_API_KEY") {
+    showMessage("Add your OMDb API key in api-key.js to enable search.");
     return;
   }
 
