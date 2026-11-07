@@ -7,9 +7,37 @@ const resultsInfo = document.querySelector("#resultsInfo");
 const sortSelect = document.querySelector("#sortSelect");
 
 let movies = [];
+let searchController;
+
+function waitForMinimumSpinnerTime(startTime) {
+  const minimumDuration = 1200;
+  const remaining = minimumDuration - (Date.now() - startTime);
+
+  if (remaining <= 0) {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve) => setTimeout(resolve, remaining));
+}
 
 function showMessage(message) {
   resultsInfo.textContent = message;
+}
+
+function showLoadingSpinner() {
+  const loading = document.createElement("div");
+  loading.className = "movies-grid__loading";
+  loading.setAttribute("role", "status");
+
+  const spinner = document.createElement("div");
+  spinner.className = "loading-spinner";
+  spinner.setAttribute("aria-hidden", "true");
+
+  const label = document.createElement("span");
+  label.textContent = "Loading results...";
+
+  loading.append(spinner, label);
+  moviesGrid.replaceChildren(loading);
 }
 
 function getYear(movie) {
@@ -85,6 +113,11 @@ searchForm.addEventListener("submit", async (event) => {
     return;
   }
 
+  searchController?.abort();
+  const controller = new AbortController();
+  searchController = controller;
+  const spinnerStartedAt = Date.now();
+  showLoadingSpinner();
   showMessage(`Searching for: ${query}...`);
 
   try {
@@ -92,13 +125,20 @@ searchForm.addEventListener("submit", async (event) => {
       apikey: OMDB_API_KEY,
       s: query,
     });
-    const response = await fetch(`https://www.omdbapi.com/?${params}`);
+    const response = await fetch(`https://www.omdbapi.com/?${params}`, {
+      signal: controller.signal,
+    });
 
     if (!response.ok) {
       throw new Error(`Request failed (${response.status}).`);
     }
 
     const data = await response.json();
+    await waitForMinimumSpinnerTime(spinnerStartedAt);
+
+    if (controller.signal.aborted) {
+      return;
+    }
 
     if (data.Response === "False") {
       movies = [];
@@ -113,7 +153,16 @@ searchForm.addEventListener("submit", async (event) => {
     renderMovies();
     showMessage(`Showing: ${query}`);
   } catch (error) {
-    showMessage(`Search failed: ${error.message}`);
+    await waitForMinimumSpinnerTime(spinnerStartedAt);
+
+    if (!controller.signal.aborted && error.name !== "AbortError") {
+      moviesGrid.replaceChildren();
+      showMessage(`Search failed: ${error.message}`);
+    }
+  } finally {
+    if (searchController === controller) {
+      searchController = undefined;
+    }
   }
 });
 

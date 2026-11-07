@@ -184,6 +184,37 @@ main {
   margin: -20px auto;
 }
 
+.movies-grid__loading {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px 0;
+  color: #333;
+}
+
+.loading-spinner {
+  width: 44px;
+  height: 44px;
+  border: 5px solid #d5e3e5;
+  border-top-color: #00b5e7;
+  border-radius: 50%;
+  animation: spinner-rotate 0.875s linear infinite;
+}
+
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-spinner {
+    animation: none;
+  }
+}
+
 .movie-card {
   width: 100%;
   margin: 0 auto;
@@ -279,9 +310,6 @@ footer {
   padding: 8px;
   margin-top: 20px;
 }
-
-
-
 
 @media (max-width: 800px) {
   nav {
