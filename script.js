@@ -1,5 +1,3 @@
-const OMDB_API_KEY = window.OMDB_API_KEY;
-
 const searchForm = document.querySelector("#searchForm");
 const searchInput = document.querySelector("#searchInput");
 const moviesGrid = document.querySelector("#moviesGrid");
@@ -121,11 +119,6 @@ searchForm.addEventListener("submit", async (event) => {
     return;
   }
 
-  if (!OMDB_API_KEY || OMDB_API_KEY === "YOUR_OMDB_API_KEY") {
-    showMessage("Add your OMDb API key in api-key.js to enable search.");
-    return;
-  }
-
   searchController?.abort();
   const controller = new AbortController();
   searchController = controller;
@@ -134,12 +127,9 @@ searchForm.addEventListener("submit", async (event) => {
   showMessage(`Searching for: ${query}...`);
 
   try {
-    const params = new URLSearchParams({
-      apikey: OMDB_API_KEY,
-      s: query,
-    });
-    const response = await fetch(`https://www.omdbapi.com/?${params}`, {
-      signal: controller.signal,
+    const params = new URLSearchParams({ s: query });
+    const response = await fetch(`/.netlify/functions/search?${params}`, {
+    signal: controller.signal,
     });
 
     if (!response.ok) {
