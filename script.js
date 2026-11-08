@@ -128,15 +128,15 @@ searchForm.addEventListener("submit", async (event) => {
 
   try {
     const params = new URLSearchParams({ s: query });
-    const response = await fetch(`/.netlify/functions/search?${params}`, {
-    signal: controller.signal,
+    const response = await fetch(`https://movie-search.butkusjohn.workers.dev/?${params}`, {
+      signal: controller.signal,
     });
 
+    const data = await response.json();
     if (!response.ok) {
-      throw new Error(`Request failed (${response.status}).`);
+      throw new Error(data.error || `Request failed (${response.status}).`);
     }
 
-    const data = await response.json();
     await waitForMinimumSpinnerTime(spinnerStartedAt);
 
     if (controller.signal.aborted) {
@@ -150,6 +150,10 @@ searchForm.addEventListener("submit", async (event) => {
         ? `No results found for: ${query}`
         : `OMDb error: ${data.Error}`);
       return;
+    }
+
+    if (!Array.isArray(data.Search)) {
+      throw new Error("The movie service returned an unexpected response.");
     }
 
     movies = data.Search;
